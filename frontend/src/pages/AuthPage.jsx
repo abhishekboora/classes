@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthPage.module.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 function AuthPage() {
   const [mode, setMode] = useState(null); // null, 'register', 'login'
   const [step, setStep] = useState(1); // for register: 1=email, 2=otp, 3=details
@@ -20,7 +22,7 @@ function AuthPage() {
     setLoading(true);
     setAlert('');
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/send-otp', { contact: email });
+      const res = await axios.post(`${BACKEND_URL}/api/auth/send-otp`, { contact: email });
       setAlert(res.data.message);
       setStep(2);
     } catch (err) {
@@ -33,7 +35,7 @@ function AuthPage() {
     setLoading(true);
     setAlert('');
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { contact: email, otp });
+      const res = await axios.post(`${BACKEND_URL}/api/auth/verify-otp`, { contact: email, otp });
       setAlert(res.data.message);
       setStep(3);
     } catch (err) {
@@ -46,7 +48,7 @@ function AuthPage() {
     setLoading(true);
     setAlert('');
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
+      const res = await axios.post(`${BACKEND_URL}/api/auth/register`, { name, email, password });
       setAlert(res.data.message);
       setMode('login');
       setStep(1);
@@ -65,7 +67,7 @@ function AuthPage() {
     setLoading(true);
     setAlert('');
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', {
+      const res = await axios.post(`${BACKEND_URL}/api/auth/login`, {
         emailOrMobile: email, password: loginPassword
       });
       setAlert(res.data.message);
